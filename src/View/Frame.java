@@ -1,9 +1,14 @@
 package View;
 
 import Controller.Main;
+import Model.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import javax.swing.WindowConstants;
 
 public class Frame extends javax.swing.JFrame {
@@ -257,6 +262,79 @@ public class Frame extends javax.swing.JFrame {
     
     public void registerAction(String username, String password, String confpass){
         main.sqlite.addUser(username, password);
+    }
+    
+    public boolean checkUsername(String username){
+        ArrayList<User> users = main.sqlite.getUsers();
+        for(int nCtr = 0; nCtr < users.size(); nCtr++){
+            if(users.get(nCtr).getUsername().equals(username)){
+                return false; //username is already taken
+            }   
+        }
+        return true;
+    }
+    
+     public boolean loginAction(String username, String password){
+        Content.removeAll();
+        adminBtn.setVisible(false);
+        staffBtn.setVisible(false);
+        managerBtn.setVisible(false);
+        clientBtn.setVisible(false);
+        ArrayList<User> users = main.sqlite.getUsers();
+        int userRole=0;
+             //Start Hashing
+        try { 
+            // getInstance() method is called with algorithm SHA-512 
+            MessageDigest md = MessageDigest.getInstance("SHA-512"); 
+  
+            // digest() method is called 
+            // to calculate message digest of the input string 
+            // returned as array of byte 
+            byte[] messageDigest = md.digest(password.getBytes()); 
+  
+            // Convert byte array into signum representation 
+            BigInteger no = new BigInteger(1, messageDigest); 
+  
+            // Convert message digest into hex value 
+            String hashtext = no.toString(16); 
+  
+            // Add preceding 0s to make it 32 bit 
+            while (hashtext.length() < 32) { 
+                hashtext = "0" + hashtext; 
+            } 
+  
+            // return the HashText 
+            password= hashtext;
+        } 
+  
+        // For specifying wrong message digest algorithms 
+        catch (NoSuchAlgorithmException e) { 
+            throw new RuntimeException(e); 
+        } 
+        //End Hashing
+        for(int nCtr = 0; nCtr < users.size(); nCtr++){
+            if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password)){
+                frameView.show(Container, "homePnl"); //if user login with valid credentials proceed to home
+                switch(users.get(nCtr).getRole()){
+                    case 1: break;
+                    case 2: Content.add(clientHomePnl, "clientHomePnl");
+                    clientBtn.setVisible(true);
+                    break;
+                    case 3: Content.add(staffHomePnl, "staffHomePnl");
+                    staffBtn.setVisible(true);
+                    break;
+                    case 4: Content.add(managerHomePnl, "managerHomePnl");
+                    managerBtn.setVisible(true);
+                    break;
+                    case 5: Content.add(adminHomePnl, "adminHomePnl");
+                    adminBtn.setVisible(true);
+                    break;
+                };
+                return true;
+            }   
+        }
+        frameView.show(Container, "loginPnl");
+        return false;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
