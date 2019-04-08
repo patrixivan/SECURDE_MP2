@@ -9,6 +9,7 @@ import View.Frame;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 
 
@@ -47,17 +48,14 @@ public class Main {
             System.out.println(" Password: " + users.get(nCtr).getPassword());
             System.out.println(" Role: " + users.get(nCtr).getRole());
         }
-
-//        // Create a database
-//        sqlite.createNewDatabase();
-//        
-//        // Drop users table if needed
+       
+        // Drop users table if needed
 //        sqlite.dropHistoryTable();
 //        sqlite.dropLogsTable();
 //        sqlite.dropProductTable();
 //        sqlite.dropUserTable();
 //        
-//        // Create users table if not exist
+        // Create users table if not exist
 //        sqlite.createHistoryTable();
 //        sqlite.createLogsTable();
 //        sqlite.createProductTable();
@@ -126,6 +124,7 @@ public class Main {
         
         // Initialize User Interface
         Frame frame = new Frame();
+        
         frame.init(this);
     }
     

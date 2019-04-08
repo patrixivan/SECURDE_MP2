@@ -3,6 +3,7 @@ package View;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 public class Register extends javax.swing.JPanel {
 
@@ -25,6 +26,7 @@ public class Register extends javax.swing.JPanel {
         notMatchPass = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
         confpass = new javax.swing.JPasswordField();
+        BackButton1 = new javax.swing.JButton();
 
         RegisterButton.setBackground(new java.awt.Color(255, 255, 255));
         RegisterButton.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
@@ -88,21 +90,34 @@ public class Register extends javax.swing.JPanel {
         confpass.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         confpass.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "CONFIRM PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
+        BackButton1.setBackground(new java.awt.Color(239, 239, 239));
+        BackButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        BackButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/View/info-logo.png"))); // NOI18N
+        BackButton1.setBorder(null);
+        BackButton1.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        BackButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BackButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(200, Short.MAX_VALUE)
+                .addContainerGap(219, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(username)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
                     .addComponent(unameTaken, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(invalidPassword, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(notMatchPass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(password, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(confpass, javax.swing.GroupLayout.Alignment.LEADING))
-                .addContainerGap(200, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(BackButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(131, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(RegisterButton, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -125,15 +140,21 @@ public class Register extends javax.swing.JPanel {
                 .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(invalidPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BackButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)))
                 .addComponent(notMatchPass, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(confpass, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(RegisterButton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -184,6 +205,8 @@ public class Register extends javax.swing.JPanel {
         
         if(validUsername && validPassword && validConfirmPassword){
             frame.registerAction(username.getText(), passText, confpassText);
+            
+            JOptionPane.showMessageDialog(null,"Account successfully created.","Registration",JOptionPane.INFORMATION_MESSAGE); 
             frame.loginNav();
             username.setText("");
             password.setText("");
@@ -205,9 +228,18 @@ public class Register extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_passwordActionPerformed
 
+    private void BackButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButton1ActionPerformed
+        // TODO add your handling code here:
+         JOptionPane.showMessageDialog(null,"Password should have atleast 8 characters.\n" +
+                                            "Password should contain atleast 1 number.\n" +
+                                            "Password should contain atleast 1 special character.",
+                                        "Password Requirements",JOptionPane.INFORMATION_MESSAGE); 
+    }//GEN-LAST:event_BackButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackButton;
+    private javax.swing.JButton BackButton1;
     private javax.swing.JButton RegisterButton;
     private javax.swing.JPasswordField confpass;
     private javax.swing.JLabel invalidPassword;
