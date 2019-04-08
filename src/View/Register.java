@@ -77,7 +77,7 @@ public class Register extends javax.swing.JPanel {
         password.setBackground(new java.awt.Color(240, 240, 240));
         password.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         password.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        password.setToolTipText("<html>\n<body>\n<p>Password should have atleast 8 characters.</p>\n<p>Password should contain atleast 1 number.</p>\n<p>Password should contain atleast 1 special character.</p>\n</body>\n</html>\n\n"); // NOI18N
+        password.setToolTipText("<html>\n<body>\n<p>Password should have atleast 8 characters.</p>\n<p>Password should contain atleast 1 uppercase.</p>\n<p>Password should contain atleast 1 lowercase.</p>\n<p>Password should contain atleast 1 number.</p>\n<p>Password should contain atleast 1 special character.</p>\n</body>\n</html>\n\n"); // NOI18N
         password.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 2, true), "PASSWORD", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
         password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,6 +177,9 @@ public class Register extends javax.swing.JPanel {
             }
         }
         
+        boolean hasUpperCase = !passText.equals(passText.toLowerCase());
+        boolean hasLowerCase = !passText.equals(passText.toUpperCase());
+        
         if(!frame.checkUsername(username.getText())){ //username already taken?
             unameTaken.setText("Username already taken!"); //show invalid username prompt
             unameTaken.setVisible(true); //show invalid username prompt
@@ -190,7 +193,7 @@ public class Register extends javax.swing.JPanel {
             unameTaken.setText("Invalid username!"); //show invalid username prompt
         }
             
-        if(passText.length()<8 || !containsSpecialCharacter || !containsNumber){
+        if(passText.length()<8 || !containsSpecialCharacter || !containsNumber || !hasLowerCase || !hasUpperCase){
             invalidPassword.setVisible(true);
         }else{
             validPassword = true;
@@ -231,6 +234,8 @@ public class Register extends javax.swing.JPanel {
     private void BackButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackButton1ActionPerformed
         // TODO add your handling code here:
          JOptionPane.showMessageDialog(null,"Password should have atleast 8 characters.\n" +
+                                            "Password should contain atleast 1 uppercase.\n" +
+                                            "Password should contain atleast 1 lowercase.\n" +
                                             "Password should contain atleast 1 number.\n" +
                                             "Password should contain atleast 1 special character.",
                                         "Password Requirements",JOptionPane.INFORMATION_MESSAGE); 
