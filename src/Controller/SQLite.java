@@ -328,6 +328,16 @@ public class SQLite {
         } catch (Exception ex) {}
     }
     
+    public void editUserRole(String username, int role) {
+        String sql = "UPDATE users SET role ='"+role+"' WHERE username='" + username + "';";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("User " + username + " has been updated.");
+        } catch (Exception ex) {}
+    }
+    
     public void removeUser(String username) {
         String sql = "DELETE FROM users WHERE username='" + username + "';";
 
@@ -337,6 +347,57 @@ public class SQLite {
             System.out.println("User " + username + " has been deleted.");
         } catch (Exception ex) {}
     }
+    
+    public void editUserLock(String username, int lock) {
+        String sql = "UPDATE users SET locked ='"+lock+"' WHERE username='" + username + "';";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("User " + username + " has been updated.");
+        } catch (Exception ex) {}
+    }
+    
+    public void editUserPass(String username, String password) {
+         //Start Hashing
+        try { 
+            // getInstance() method is called with algorithm SHA-512 
+            MessageDigest md = MessageDigest.getInstance("SHA-512"); 
+  
+            // digest() method is called 
+            // to calculate message digest of the input string 
+            // returned as array of byte 
+            byte[] messageDigest = md.digest(password.getBytes()); 
+  
+            // Convert byte array into signum representation 
+            BigInteger no = new BigInteger(1, messageDigest); 
+  
+            // Convert message digest into hex value 
+            String hashtext = no.toString(16); 
+  
+            // Add preceding 0s to make it 32 bit 
+            while (hashtext.length() < 32) { 
+                hashtext = "0" + hashtext; 
+            } 
+  
+            // return the HashText 
+            password= hashtext;
+        } 
+  
+        // For specifying wrong message digest algorithms 
+        catch (NoSuchAlgorithmException e) { 
+            throw new RuntimeException(e); 
+        } 
+        //End Hashing
+        String sql = "UPDATE users SET password ='"+password+"' WHERE username='" + username + "';";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("User " + username + " has been updated.");
+        } catch (Exception ex) {}
+    }
+    
     
     public Product getProduct(String name){
         String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
