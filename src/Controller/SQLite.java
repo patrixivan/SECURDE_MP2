@@ -411,4 +411,26 @@ public class SQLite {
         } catch (Exception ex) {}
         return product;
     }
+    
+    public void purchaseProduct(String product_name, int stock){
+        Product db_product = getProduct(product_name);
+        int stocks_left = db_product.getStock() - stock;
+        if(db_product.getStock() != stock){ //IF PRODUCT HAS STILL STOCKS LEFT
+            String sql = "UPDATE product SET stock ='"+stocks_left+"' WHERE name='" + product_name + "';";
+            try (Connection conn = DriverManager.getConnection(driverURL);
+                Statement stmt = conn.createStatement()) {
+                stmt.execute(sql);
+                System.out.println("Product " + product_name + " has been updated.");
+            } catch (Exception ex) {}
+        }else{ //IF PRODUCT IS OUT OF STOCK AFTER PURCHASE
+            String sql = "DELETE FROM product WHERE name='" + product_name + "';";
+
+            try (Connection conn = DriverManager.getConnection(driverURL);
+                Statement stmt = conn.createStatement()) {
+                stmt.execute(sql);
+                System.out.println("Product " + product_name + " has been emptied.");
+            } catch (Exception ex) {}
+        }
+        
+    }
 }

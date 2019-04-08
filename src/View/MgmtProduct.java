@@ -8,6 +8,8 @@ package View;
 import Controller.SQLite;
 import Model.Product;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -185,6 +187,17 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
             if (result == JOptionPane.OK_OPTION) {
+                Pattern p = Pattern.compile("^[0-9]*$", Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(stockFld.getText());
+                boolean validStock = m.find();
+                if(validStock && Integer.parseInt(stockFld.getText())>0 && Integer.parseInt(stockFld.getText()) <= Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString())){
+                    JOptionPane.showMessageDialog(null,"Successfully purchased "+stockFld.getText()+" "+tableModel.getValueAt(table.getSelectedRow(), 0)+".","Purchase",JOptionPane.INFORMATION_MESSAGE);
+                    sqlite.purchaseProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
+                    init();
+                }else{
+                    JOptionPane.showMessageDialog(null,"Invalid value of stock/s.","Invalid Stock",JOptionPane.ERROR_MESSAGE);
+                }
+                
                 System.out.println(stockFld.getText());
             }
         }
