@@ -7,6 +7,7 @@ package View;
 
 import Controller.SQLite;
 import Model.History;
+import Model.Logs;
 import Model.Product;
 import Model.User;
 import java.util.ArrayList;
@@ -202,11 +203,15 @@ public class MgmtProduct extends javax.swing.JPanel {
                         sqlite.purchaseProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
                         History h = new History(user.getUsername(), tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
                         sqlite.addHistory(h.getUsername(), h.getName(), h.getStock(), h.getTimestamp().toString());
+                        Logs log = new Logs("PROD", user.getUsername(), "Purchased "+Integer.parseInt(stockFld.getText())+" product:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString());
+                        sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                         init();
                     }else{
                         if(Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString()) == 0){
                             JOptionPane.showMessageDialog(null,"Product out of stock.","Out of Stock",JOptionPane.ERROR_MESSAGE);
                         }else{
+                            Logs log = new Logs("FAIL", user.getUsername(), "Purchase unsuccessful");
+                            sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                             JOptionPane.showMessageDialog(null,"Invalid value of stock/s.","Invalid Stock",JOptionPane.ERROR_MESSAGE);
                         }
                     }
@@ -258,31 +263,31 @@ public class MgmtProduct extends javax.swing.JPanel {
                 if(!stockFld.getText().isEmpty() && !nameFld.getText().isEmpty() && !priceFld.getText().isEmpty() && validStock && validPrice && validName && Integer.parseInt(stockFld.getText())>0){
                     JOptionPane.showMessageDialog(null,"Successfully added "+stockFld.getText()+" "+nameFld.getText()+".","Add Product",JOptionPane.INFORMATION_MESSAGE);
                     sqlite.addProduct(nameFld.getText(), Integer.parseInt(stockFld.getText()), Double.parseDouble(cleanPrice) );
+                    Logs log = new Logs("PROD", user.getUsername(), "Added product:"+nameFld.getText());
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                     init();
                 }else{
-                    if(stockFld.getText().isEmpty()){
-                        error = error + "Number of stock/s is empty.\n";
-                    }
                     if(nameFld.getText().isEmpty()){
                         error = error + "Product name is empty.\n";
+                    }else if(!validName){
+                        error = error + "Duplicate product name.\n";                        
                     }
                     if(priceFld.getText().isEmpty()){
                         error = error + "Product price is empty.\n";
-                    }
-                    if(!validStock){
-                        error = error + "Invalid value for product stocks.\n";
-                        
-                    }else if(Integer.parseInt(stockFld.getText())<=0){
-                        error = error + "Stocks must be greater than 0.\n";
-                    }
-                    if(!validPrice){
+                    }else if(!validPrice){
                         error = error + "Invalid value for product price.\n";
                         
                     }
-                    if(!validName){
-                        error = error + "Duplicate product name.\n";
-                        
+                    if(stockFld.getText().isEmpty()){
+                        error = error + "Number of stock/s is empty.\n";
+                    }else if(!validStock){
+                        error = error + "Invalid value for product stocks.\n";
+                    }else if(Integer.parseInt(stockFld.getText())<=0){
+                        error = error + "Stocks must be greater than 0.\n";
                     }
+                    Logs log = new Logs("FAIL", user.getUsername(), "Add product unsuccessful");
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
+                    
                     JOptionPane.showMessageDialog(null,error,"Invalid Product",JOptionPane.ERROR_MESSAGE);
                 }
             System.out.println(nameFld.getText());
@@ -347,31 +352,30 @@ public class MgmtProduct extends javax.swing.JPanel {
                 if(!stockFld.getText().isEmpty() && !nameFld.getText().isEmpty() && !priceFld.getText().isEmpty() && validStock && validPrice && validName && Integer.parseInt(stockFld.getText())>0){
                     JOptionPane.showMessageDialog(null,"Successfully edited "+nameFld.getText()+".","Edit Product",JOptionPane.INFORMATION_MESSAGE);
                     sqlite.editProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), nameFld.getText(), Integer.parseInt(stockFld.getText()), Double.parseDouble(cleanPrice) );
+                    Logs log = new Logs("PROD", user.getUsername(), "Edited product:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString());
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                     init();
                 }else{
-                    if(stockFld.getText().isEmpty()){
-                        error = error + "Number of stock/s is empty.\n";
-                    }
                     if(nameFld.getText().isEmpty()){
                         error = error + "Product name is empty.\n";
+                    }else if(!validName){
+                        error = error + "Duplicate product name.\n";                        
                     }
                     if(priceFld.getText().isEmpty()){
                         error = error + "Product price is empty.\n";
-                    }
-                    if(!validStock){
-                        error = error + "Invalid value for product stocks.\n";
-                        
-                    }else if(Integer.parseInt(stockFld.getText())<=0){
-                        error = error + "Stocks must be greater than 0.\n";
-                    }
-                    if(!validPrice){
+                    }else if(!validPrice){
                         error = error + "Invalid value for product price.\n";
                         
                     }
-                    if(!validName){
-                        error = error + "Duplicate product name.\n";
-                        
+                    if(stockFld.getText().isEmpty()){
+                        error = error + "Number of stock/s is empty.\n";
+                    }else if(!validStock){
+                        error = error + "Invalid value for product stocks.\n";
+                    }else if(Integer.parseInt(stockFld.getText())<=0){
+                        error = error + "Stocks must be greater than 0.\n";
                     }
+                    Logs log = new Logs("FAIL", user.getUsername(), "Edit product unsuccessful");
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                     JOptionPane.showMessageDialog(null,error,"Edit Product",JOptionPane.ERROR_MESSAGE);
                 }
                 System.out.println(nameFld.getText());
@@ -387,6 +391,8 @@ public class MgmtProduct extends javax.swing.JPanel {
             
             if (result == JOptionPane.YES_OPTION) {
                 sqlite.removeProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString());
+                Logs log = new Logs("PROD", user.getUsername(), "Deleted product:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString());
+                sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 JOptionPane.showMessageDialog(null,"Successfully deleted product: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+".","Delete Product",JOptionPane.INFORMATION_MESSAGE);
                 init();

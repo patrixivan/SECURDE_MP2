@@ -6,6 +6,7 @@
 package View;
 
 import Controller.SQLite;
+import Model.Logs;
 import Model.User;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -194,6 +195,8 @@ public class MgmtUser extends javax.swing.JPanel {
                 "EDIT USER ROLE", JOptionPane.QUESTION_MESSAGE, null, options, options[(int)tableModel.getValueAt(table.getSelectedRow(), 2) - 1]);
             
             if(result != null){
+                Logs log = new Logs("USERS", user.getUsername(), "Edited role of user:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+" to "+result.substring(2));
+                sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                 sqlite.editUserRole(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(result.charAt(0)+""));
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 System.out.println(result.charAt(0));       
@@ -209,7 +212,8 @@ public class MgmtUser extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
-                
+                Logs log = new Logs("USERS", user.getUsername(), "Deleted user:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString());
+                sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                 sqlite.removeUser(tableModel.getValueAt(table.getSelectedRow(), 0).toString());
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 JOptionPane.showMessageDialog(null,"User: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+" has been deleted.","Delete User",JOptionPane.INFORMATION_MESSAGE);
@@ -236,10 +240,15 @@ public class MgmtUser extends javax.swing.JPanel {
                     lock = 0;
                 }
                 sqlite.editUserLock(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), lock);
+                
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
                 if(lock==1){
+                    Logs log = new Logs("USERS", user.getUsername(), "User:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString() +" has been locked.");
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                     JOptionPane.showMessageDialog(null,"User: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+" has been locked.","Lock/Unlock User",JOptionPane.INFORMATION_MESSAGE);
                 }else{
+                    Logs log = new Logs("USERS", user.getUsername(), "User:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString() +" has been unlocked.");
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                     JOptionPane.showMessageDialog(null,"User: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+" has been unlocked","Lock/Unlock User",JOptionPane.INFORMATION_MESSAGE);
                 }
                 
@@ -319,10 +328,15 @@ public class MgmtUser extends javax.swing.JPanel {
             if (result == JOptionPane.OK_OPTION) {
                 if(checkPass(password.getText(), confpass.getText())){
                     sqlite.editUserPass(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), confpass.getText());
+                    Logs log = new Logs("USERS", user.getUsername(), "User:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString() +" password has been updated.");
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                     System.out.println(password.getText());
                     System.out.println(confpass.getText());
                     JOptionPane.showMessageDialog(null,"User: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+" password has been updated.","Change Password",JOptionPane.INFORMATION_MESSAGE);
                     init();
+                }else{
+                     Logs log = new Logs("FAIL", user.getUsername(), "User:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString() +" password change unsuccessful");
+                    sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                 }                
                 
                 

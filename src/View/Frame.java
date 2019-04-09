@@ -319,6 +319,8 @@ public class Frame extends javax.swing.JFrame {
             if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password)){   
                 User u = new User(users.get(nCtr).getId(), users.get(nCtr).getUsername(), users.get(nCtr).getPassword(), users.get(nCtr).getRole(), users.get(nCtr).getLocked());
                 frameView.show(Container, "homePnl"); //if user login with valid credentials proceed to home
+                Logs log = new Logs("NOTICE", username, "User logged in");
+                main.sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                 switch(users.get(nCtr).getRole()){
                     case 1: break;
                     case 2:
