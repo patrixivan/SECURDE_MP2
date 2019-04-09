@@ -277,7 +277,7 @@ public class Frame extends javax.swing.JFrame {
         return true;
     }
     
-     public boolean loginAction(String username, String password){
+     public String loginAction(String username, String password){
         Content.removeAll();
         adminBtn.setVisible(false);
         staffBtn.setVisible(false);
@@ -316,39 +316,58 @@ public class Frame extends javax.swing.JFrame {
         } 
         //End Hashing
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
-            if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password)){   
-                User u = new User(users.get(nCtr).getId(), users.get(nCtr).getUsername(), users.get(nCtr).getPassword(), users.get(nCtr).getRole(), users.get(nCtr).getLocked());
-                frameView.show(Container, "homePnl"); //if user login with valid credentials proceed to home
-                Logs log = new Logs("NOTICE", username, "User logged in");
-                main.sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
-                switch(users.get(nCtr).getRole()){
-                    case 1: break;
-                    case 2:
-                        clientHomePnl.setUser(u);
-                        Content.add(clientHomePnl, "clientHomePnl");
-                        clientBtn.setVisible(true);
-                    break;
-                    case 3: 
-                        staffHomePnl.setUser(u);
-                        Content.add(staffHomePnl, "staffHomePnl");
-                        staffBtn.setVisible(true);
-                    break;
-                    case 4: 
-                        managerHomePnl.setUser(u);
-                        Content.add(managerHomePnl, "managerHomePnl");
-                        managerBtn.setVisible(true);
-                    break;
-                    case 5:
-                        adminHomePnl.setUser(u);
-                        Content.add(adminHomePnl, "adminHomePnl");
-                        adminBtn.setVisible(true);
-                    break;
-                };
-                return true;
-            }   
+            if(users.get(nCtr).getAttempt()<6){
+                if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password) && users.get(nCtr).getLocked()==0){   
+                    User u = new User(users.get(nCtr).getId(), users.get(nCtr).getUsername(), users.get(nCtr).getPassword(), users.get(nCtr).getRole(), users.get(nCtr).getLocked(), users.get(nCtr).getAttempt());
+                    frameView.show(Container, "homePnl"); //if user login with valid credentials proceed to home
+                    Logs log = new Logs("NOTICE", username, "User logged in");
+                    main.sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
+                    switch(users.get(nCtr).getRole()){
+                        case 1: break;
+                        case 2:
+                            clientHomePnl.setUser(u);
+                            Content.add(clientHomePnl, "clientHomePnl");
+                            clientBtn.setVisible(true);
+                        break;
+                        case 3: 
+                            staffHomePnl.setUser(u);
+                            Content.add(staffHomePnl, "staffHomePnl");
+                            staffBtn.setVisible(true);
+                        break;
+                        case 4: 
+                            managerHomePnl.setUser(u);
+                            Content.add(managerHomePnl, "managerHomePnl");
+                            managerBtn.setVisible(true);
+                        break;
+                        case 5:
+                            adminHomePnl.setUser(u);
+                            Content.add(adminHomePnl, "adminHomePnl");
+                            adminBtn.setVisible(true);
+                        break;
+                    };
+                    return "success";
+                }else if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password) && users.get(nCtr).getLocked()==1){
+                    return "locked";
+                }else if(users.get(nCtr).getUsername().equals(username) && !users.get(nCtr).getPassword().equals(password)){
+                    users.get(nCtr).setAttempt(users.get(nCtr).getAttempt()+1);
+                    main.sqlite.editUserAttempt(users.get(nCtr).getUsername(),users.get(nCtr).getAttempt());
+                    
+                    System.out.println(users.get(nCtr).getUsername()+users.get(nCtr).getAttempt());
+                }
+                
+            }else{
+                main.sqlite.editUserLock(users.get(nCtr).getUsername(), 1);
+            }
+            
         }
         frameView.show(Container, "loginPnl");
-        return false;
+        for(int lCtr = 0; lCtr < users.size(); lCtr++){
+            if(users.get(lCtr).getUsername().equals(username) && users.get(lCtr).getLocked()==1)
+                return "locked";
+            else
+                return "incorrect";
+        }
+        return "incorrect";
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
