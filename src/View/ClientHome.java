@@ -34,24 +34,24 @@ public class ClientHome extends javax.swing.JPanel {
     }
     
     public void init(SQLite sqlite){
+        
+        usersBtn.setText("USER");
         u=new User(null, null);
         mgmtHistory = new MgmtHistory(sqlite, this.u);
         mgmtLogs = new MgmtLogs(sqlite, this.u);
         mgmtProduct = new MgmtProduct(sqlite, this.u);
         mgmtUser = new MgmtUser(sqlite, this.u);
-    
         Content.setLayout(contentView);
         Content.add(new Home("WELCOME CLIENT!", new java.awt.Color(255,102,51)), "home");
         Content.add(mgmtUser, "mgmtUser");
         Content.add(mgmtHistory, "mgmtHistory");
         Content.add(mgmtProduct, "mgmtProduct");
         Content.add(mgmtLogs, "mgmtLogs");
-        
 //        UNCOMMENT TO DISABLE BUTTONS
 //        historyBtn.setVisible(false);
 //        usersBtn.setVisible(false);
 //        productsBtn.setVisible(false);
-//        logsBtn.setVisible(false);
+        logsBtn.setVisible(false);
     }
     
     public void showPnl(String panelName){

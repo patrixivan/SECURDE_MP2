@@ -5,6 +5,7 @@ import Model.Logs;
 import Model.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -220,6 +221,7 @@ public class Frame extends javax.swing.JFrame {
     private CardLayout contentView = new CardLayout();
     private CardLayout frameView = new CardLayout();
     
+    
     public void init(Main controller){
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle("SECURDE - SECURITY Svcs");
@@ -327,21 +329,25 @@ public class Frame extends javax.swing.JFrame {
                         case 2:
                             clientHomePnl.setUser(u);
                             Content.add(clientHomePnl, "clientHomePnl");
+                            clientHomePnl.showPnl("home");
                             clientBtn.setVisible(true);
                         break;
                         case 3: 
                             staffHomePnl.setUser(u);
                             Content.add(staffHomePnl, "staffHomePnl");
+                            staffHomePnl.showPnl("home");
                             staffBtn.setVisible(true);
                         break;
                         case 4: 
                             managerHomePnl.setUser(u);
                             Content.add(managerHomePnl, "managerHomePnl");
+                            managerHomePnl.showPnl("home");
                             managerBtn.setVisible(true);
                         break;
                         case 5:
                             adminHomePnl.setUser(u);
                             Content.add(adminHomePnl, "adminHomePnl");
+                            adminHomePnl.showPnl("home");
                             adminBtn.setVisible(true);
                         break;
                     };
@@ -353,8 +359,7 @@ public class Frame extends javax.swing.JFrame {
                     main.sqlite.editUserAttempt(users.get(nCtr).getUsername(),users.get(nCtr).getAttempt());
                     
                     System.out.println(users.get(nCtr).getUsername()+users.get(nCtr).getAttempt());
-                }
-                
+                }  
             }else{
                 main.sqlite.editUserLock(users.get(nCtr).getUsername(), 1);
             }

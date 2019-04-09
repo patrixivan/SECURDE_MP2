@@ -44,6 +44,37 @@ public class MgmtProduct extends javax.swing.JPanel {
     }
 
     public void init(){
+        switch(user.getRole()){
+            case 1: break;
+            case 2:
+//                System.out.println(user.getUsername()+" || entered2");
+                purchaseBtn.setVisible(true);
+                addBtn.setVisible(false);
+                editBtn.setVisible(false);
+                deleteBtn.setVisible(false);
+                break;
+            case 3:
+//                System.out.println(user.getRole()+" ||entered3");
+                purchaseBtn.setVisible(false);
+                addBtn.setVisible(false);
+                editBtn.setVisible(true);
+                deleteBtn.setVisible(false);
+                break;
+            case 4:
+//                System.out.println(user.getRole()+" ||entered4");
+                purchaseBtn.setVisible(false);
+                addBtn.setVisible(true);
+                editBtn.setVisible(true);
+                deleteBtn.setVisible(true);
+                break;
+            case 5:
+//                System.out.println(user.getRole()+" ||entered5");
+                purchaseBtn.setVisible(false);
+                addBtn.setVisible(false);
+                editBtn.setVisible(false);
+                deleteBtn.setVisible(false);
+                break;
+        };
         //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
@@ -301,11 +332,17 @@ public class MgmtProduct extends javax.swing.JPanel {
             JTextField nameFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 0) + "");
             JTextField stockFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 1) + "");
             JTextField priceFld = new JTextField(tableModel.getValueAt(table.getSelectedRow(), 2) + "");
-
-            designer(nameFld, "PRODUCT NAME");
-            designer(stockFld, "PRODUCT STOCK");
-            designer(priceFld, "PRODUCT PRICE");
-
+            
+            if(user.getRole()==4){
+                designer(nameFld, "PRODUCT NAME");
+                designer(stockFld, "PRODUCT STOCK");
+                designer(priceFld, "PRODUCT PRICE");
+            }
+            else if(user.getRole()==3){
+               nameFld.setVisible(false);
+               priceFld.setVisible(false);
+               designer(stockFld, "PRODUCT STOCK"); 
+            }
             Object[] message = {
                 "Edit Product Details:", nameFld, stockFld, priceFld
             };
