@@ -58,7 +58,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 System.out.println(user.getRole()+" ||entered3");
                 editRoleBtn.setVisible(false);
                 deleteBtn.setVisible(false);
-                lockBtn.setVisible(false);
+                lockBtn.setVisible(true);
                 chgpassBtn.setVisible(true);
                 break;
             case 4:
@@ -236,8 +236,6 @@ public class MgmtUser extends javax.swing.JPanel {
                 init();
                 
             }
-        }else{
-              JOptionPane.showMessageDialog(null,"You are not authorized","Edit R",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_editRoleBtnActionPerformed
 
