@@ -108,13 +108,19 @@ public class Login extends javax.swing.JPanel {
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         String passText = new String( password.getPassword());
-        if(!frame.loginAction(username.getText(), passText)){
+        if(frame.loginAction(username.getText(), passText).equals("locked")){
             password.setText("");
             Invalid.setVisible(true);
-        }else{
+            Invalid.setText("Account is locked");
+        }else if(frame.loginAction(username.getText(), passText).equals("incorrect")){
+            password.setText("");
+            Invalid.setVisible(true);
+            Invalid.setText("Incorrect username or password");
+        }else if(frame.loginAction(username.getText(), passText).equals("success")){
             Invalid.setVisible(false);
             username.setText("");
-            password.setText("");}
+            password.setText("");
+        }
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     private void RegisterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisterButtonActionPerformed

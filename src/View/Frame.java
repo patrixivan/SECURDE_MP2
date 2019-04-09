@@ -277,7 +277,7 @@ public class Frame extends javax.swing.JFrame {
         return true;
     }
     
-     public boolean loginAction(String username, String password){
+     public String loginAction(String username, String password){
         Content.removeAll();
         adminBtn.setVisible(false);
         staffBtn.setVisible(false);
@@ -316,7 +316,7 @@ public class Frame extends javax.swing.JFrame {
         } 
         //End Hashing
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
-            if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password)){   
+            if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password) && users.get(nCtr).getLocked()==0){   
                 User u = new User(users.get(nCtr).getId(), users.get(nCtr).getUsername(), users.get(nCtr).getPassword(), users.get(nCtr).getRole(), users.get(nCtr).getLocked());
                 frameView.show(Container, "homePnl"); //if user login with valid credentials proceed to home
                 Logs log = new Logs("NOTICE", username, "User logged in");
@@ -344,11 +344,14 @@ public class Frame extends javax.swing.JFrame {
                         adminBtn.setVisible(true);
                     break;
                 };
-                return true;
+                return "success";
+            }else if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password) && users.get(nCtr).getLocked()==1){
+                return "locked";
             }   
+            
         }
         frameView.show(Container, "loginPnl");
-        return false;
+        return "incorrect";
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
