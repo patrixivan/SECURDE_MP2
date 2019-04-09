@@ -44,6 +44,37 @@ public class MgmtProduct extends javax.swing.JPanel {
     }
 
     public void init(){
+        switch(user.getRole()){
+            case 1: break;
+            case 2:
+//                System.out.println(user.getUsername()+" || entered2");
+                purchaseBtn.setVisible(true);
+                addBtn.setVisible(false);
+                editBtn.setVisible(false);
+                deleteBtn.setVisible(false);
+                break;
+            case 3:
+//                System.out.println(user.getRole()+" ||entered3");
+                purchaseBtn.setVisible(false);
+                addBtn.setVisible(true);
+                editBtn.setVisible(true);
+                deleteBtn.setVisible(true);
+                break;
+            case 4:
+//                System.out.println(user.getRole()+" ||entered4");
+                purchaseBtn.setVisible(false);
+                addBtn.setVisible(true);
+                editBtn.setVisible(true);
+                deleteBtn.setVisible(true);
+                break;
+            case 5:
+//                System.out.println(user.getRole()+" ||entered5");
+                purchaseBtn.setVisible(false);
+                addBtn.setVisible(false);
+                editBtn.setVisible(false);
+                deleteBtn.setVisible(false);
+                break;
+        };
         //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);

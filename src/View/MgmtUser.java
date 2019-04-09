@@ -44,7 +44,7 @@ public class MgmtUser extends javax.swing.JPanel {
     }
     
     public void init(){
-switch(user.getRole()){
+        switch(user.getRole()){
             case 1: break;
             case 2:
                 System.out.println(user.getUsername()+" || entered2");
