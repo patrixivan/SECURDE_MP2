@@ -107,7 +107,7 @@ public class Login extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-              String passText = new String( password.getPassword());
+        String passText = new String( password.getPassword());
         if(!frame.loginAction(username.getText(), passText)){
             password.setText("");
             Invalid.setVisible(true);

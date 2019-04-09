@@ -26,10 +26,12 @@ public class MgmtUser extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
+    public User user;
     
-    public MgmtUser(SQLite sqlite) {
+    public MgmtUser(SQLite sqlite, User user) {
         initComponents();
         this.sqlite = sqlite;
+        this.user = user;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
         
@@ -56,6 +58,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 users.get(nCtr).getLocked()});
         }
     }
+    
 
     public void designer(JTextField component, String text){
         component.setSize(70, 600);
@@ -216,6 +219,7 @@ public class MgmtUser extends javax.swing.JPanel {
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void lockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lockBtnActionPerformed
+        System.out.print(this.user.getUsername());
         if(table.getSelectedRow() >= 0){
             String state = "lock";
             int lock = 0;

@@ -6,7 +6,9 @@
 package View;
 
 import Controller.SQLite;
+import Model.History;
 import Model.Product;
+import Model.User;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,10 +25,12 @@ public class MgmtProduct extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
+    public User user;
     
-    public MgmtProduct(SQLite sqlite) {
+    public MgmtProduct(SQLite sqlite,User user) {
         initComponents();
         this.sqlite = sqlite;
+        this.user = user;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
@@ -177,6 +181,7 @@ public class MgmtProduct extends javax.swing.JPanel {
 
     private void purchaseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseBtnActionPerformed
         if(table.getSelectedRow() >= 0){
+            
             JTextField stockFld = new JTextField("0");
             designer(stockFld, "PRODUCT STOCK");
 
@@ -195,6 +200,8 @@ public class MgmtProduct extends javax.swing.JPanel {
                     if(!stockFld.getText().isEmpty() && validStock && Integer.parseInt(stockFld.getText())>0 && Integer.parseInt(stockFld.getText()) <= Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString())){
                         JOptionPane.showMessageDialog(null,"Successfully purchased "+stockFld.getText()+" "+tableModel.getValueAt(table.getSelectedRow(), 0)+".","Purchase",JOptionPane.INFORMATION_MESSAGE);
                         sqlite.purchaseProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
+                        History h = new History(user.getUsername(), tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
+                        sqlite.addHistory(h.getUsername(), h.getName(), h.getStock(), h.getTimestamp().toString());
                         init();
                     }else{
                         if(Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString()) == 0){
@@ -202,9 +209,7 @@ public class MgmtProduct extends javax.swing.JPanel {
                         }else{
                             JOptionPane.showMessageDialog(null,"Invalid value of stock/s.","Invalid Stock",JOptionPane.ERROR_MESSAGE);
                         }
-
                     }
-
                     System.out.println(stockFld.getText());
                 }
             }

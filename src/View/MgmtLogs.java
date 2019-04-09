@@ -7,6 +7,7 @@ package View;
 
 import Controller.SQLite;
 import Model.Logs;
+import Model.User;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -18,10 +19,11 @@ public class MgmtLogs extends javax.swing.JPanel {
 
     public SQLite sqlite;
     public DefaultTableModel tableModel;
-    
-    public MgmtLogs(SQLite sqlite) {
+    public User user;
+    public MgmtLogs(SQLite sqlite , User user) {
         initComponents();
         this.sqlite = sqlite;
+        this.user = user;
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
         
