@@ -183,23 +183,30 @@ public class MgmtProduct extends javax.swing.JPanel {
             Object[] message = {
                 "How many " + tableModel.getValueAt(table.getSelectedRow(), 0) + " do you want to purchase?", stockFld
             };
+            if(Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString()) == 0){
+                JOptionPane.showMessageDialog(null,"Product out of stock.","Out of Stock",JOptionPane.ERROR_MESSAGE);
+            }else{
+                int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+                if (result == JOptionPane.OK_OPTION) {
+                    Pattern p = Pattern.compile("^[0-9]*$", Pattern.CASE_INSENSITIVE);
+                    Matcher m = p.matcher(stockFld.getText());
+                    boolean validStock = m.find();
 
-            int result = JOptionPane.showConfirmDialog(null, message, "PURCHASE PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
+                    if(!stockFld.getText().isEmpty() && validStock && Integer.parseInt(stockFld.getText())>0 && Integer.parseInt(stockFld.getText()) <= Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString())){
+                        JOptionPane.showMessageDialog(null,"Successfully purchased "+stockFld.getText()+" "+tableModel.getValueAt(table.getSelectedRow(), 0)+".","Purchase",JOptionPane.INFORMATION_MESSAGE);
+                        sqlite.purchaseProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
+                        init();
+                    }else{
+                        if(Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString()) == 0){
+                            JOptionPane.showMessageDialog(null,"Product out of stock.","Out of Stock",JOptionPane.ERROR_MESSAGE);
+                        }else{
+                            JOptionPane.showMessageDialog(null,"Invalid value of stock/s.","Invalid Stock",JOptionPane.ERROR_MESSAGE);
+                        }
 
-            if (result == JOptionPane.OK_OPTION) {
-                Pattern p = Pattern.compile("^[0-9]*$", Pattern.CASE_INSENSITIVE);
-                Matcher m = p.matcher(stockFld.getText());
-                boolean validStock = m.find();
-                
-                if(!stockFld.getText().isEmpty() && validStock && Integer.parseInt(stockFld.getText())>0 && Integer.parseInt(stockFld.getText()) <= Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString())){
-                    JOptionPane.showMessageDialog(null,"Successfully purchased "+stockFld.getText()+" "+tableModel.getValueAt(table.getSelectedRow(), 0)+".","Purchase",JOptionPane.INFORMATION_MESSAGE);
-                    sqlite.purchaseProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
-                    init();
-                }else{
-                    JOptionPane.showMessageDialog(null,"Invalid value of stock/s.","Invalid Stock",JOptionPane.ERROR_MESSAGE);
+                    }
+
+                    System.out.println(stockFld.getText());
                 }
-                
-                System.out.println(stockFld.getText());
             }
         }
     }//GEN-LAST:event_purchaseBtnActionPerformed
