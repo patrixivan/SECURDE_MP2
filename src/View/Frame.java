@@ -1,6 +1,7 @@
 package View;
 
 import Controller.Main;
+import Model.Logs;
 import Model.User;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -262,6 +263,8 @@ public class Frame extends javax.swing.JFrame {
     
     public void registerAction(String username, String password, String confpass){
         main.sqlite.addUser(username, password);
+        Logs log = new Logs("NOTICE", username, "User creation successful");
+        main.sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
     }
     
     public boolean checkUsername(String username){

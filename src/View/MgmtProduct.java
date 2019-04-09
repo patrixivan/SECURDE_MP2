@@ -31,6 +31,7 @@ public class MgmtProduct extends javax.swing.JPanel {
         initComponents();
         this.sqlite = sqlite;
         this.user = user;
+        
         tableModel = (DefaultTableModel)table.getModel();
         table.getTableHeader().setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 14));
 
@@ -181,7 +182,6 @@ public class MgmtProduct extends javax.swing.JPanel {
 
     private void purchaseBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchaseBtnActionPerformed
         if(table.getSelectedRow() >= 0){
-            
             JTextField stockFld = new JTextField("0");
             designer(stockFld, "PRODUCT STOCK");
 

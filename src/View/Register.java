@@ -208,7 +208,6 @@ public class Register extends javax.swing.JPanel {
         
         if(validUsername && validPassword && validConfirmPassword){
             frame.registerAction(username.getText(), passText, confpassText);
-            
             JOptionPane.showMessageDialog(null,"Account successfully created.","Registration",JOptionPane.INFORMATION_MESSAGE); 
             frame.loginNav();
             username.setText("");
