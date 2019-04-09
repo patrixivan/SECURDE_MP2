@@ -400,7 +400,7 @@ public class SQLite {
     
     
     public Product getProduct(String name){
-        String sql = "SELECT name, stock, price FROM product WHERE name='" + name + "';";
+        String sql = "SELECT name, stock, price FROM product WHERE name like '" + name + "';";
         Product product = null;
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement();
@@ -431,6 +431,25 @@ public class SQLite {
                 System.out.println("Product " + product_name + " has been emptied.");
             } catch (Exception ex) {}
         }
-        
     }
+    public void editProduct(String old_name, String product_name, int stock, double price) {
+        String sql = "UPDATE product SET name ='"+product_name+"', stock ='"+stock+"', price ='"+price+"' WHERE name='" + old_name + "';";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("Product " + old_name + " has been updated.");
+        } catch (Exception ex) {}
+    }
+    
+    public void removeProduct(String product_name) {
+        String sql = "DELETE FROM product WHERE name='" + product_name + "';";
+
+        try (Connection conn = DriverManager.getConnection(driverURL);
+            Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+            System.out.println("Product " + product_name + " has been deleted.");
+        } catch (Exception ex) {}
+    }
+    
 }

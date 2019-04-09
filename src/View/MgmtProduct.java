@@ -190,7 +190,8 @@ public class MgmtProduct extends javax.swing.JPanel {
                 Pattern p = Pattern.compile("^[0-9]*$", Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(stockFld.getText());
                 boolean validStock = m.find();
-                if(validStock && Integer.parseInt(stockFld.getText())>0 && Integer.parseInt(stockFld.getText()) <= Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString())){
+                
+                if(!stockFld.getText().isEmpty() && validStock && Integer.parseInt(stockFld.getText())>0 && Integer.parseInt(stockFld.getText()) <= Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString())){
                     JOptionPane.showMessageDialog(null,"Successfully purchased "+stockFld.getText()+" "+tableModel.getValueAt(table.getSelectedRow(), 0)+".","Purchase",JOptionPane.INFORMATION_MESSAGE);
                     sqlite.purchaseProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
                     init();
@@ -219,6 +220,59 @@ public class MgmtProduct extends javax.swing.JPanel {
         int result = JOptionPane.showConfirmDialog(null, message, "ADD PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
         if (result == JOptionPane.OK_OPTION) {
+                if(nameFld.getText().trim().isEmpty()){
+                    nameFld.setText(nameFld.getText().replace(" ", ""));
+                }else{
+                     nameFld.setText(nameFld.getText().trim());
+                }        
+                stockFld.setText(stockFld.getText().replace(" ", ""));
+                priceFld.setText(priceFld.getText().replace(" ", ""));
+                String error = "";
+                boolean validName = true;
+                Product checkName = sqlite.getProduct(nameFld.getText());
+                if(checkName!=null){ //CHECKS IF PRODUCT NAME ALREADY EXISTS IN THE DB
+                    validName = false;
+                }
+             
+                Pattern p = Pattern.compile("^[0-9]*$", Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(stockFld.getText());
+                boolean validStock = m.find();
+                //"^([0-9]*[.])?[0-9]{0,2}$" REGEX FOR PRICE WITHOUT COMMA
+                Pattern p1 = Pattern.compile("^([0-9]*[,]?[0-9]+[.])?[0-9]{0,2}$", Pattern.CASE_INSENSITIVE);
+                Matcher m1 = p1.matcher(priceFld.getText());
+                boolean validPrice = m1.find();
+                String cleanPrice = priceFld.getText().replace(",", "");
+                
+                if(!stockFld.getText().isEmpty() && !nameFld.getText().isEmpty() && !priceFld.getText().isEmpty() && validStock && validPrice && validName && Integer.parseInt(stockFld.getText())>0){
+                    JOptionPane.showMessageDialog(null,"Successfully added "+stockFld.getText()+" "+nameFld.getText()+".","Add Product",JOptionPane.INFORMATION_MESSAGE);
+                    sqlite.addProduct(nameFld.getText(), Integer.parseInt(stockFld.getText()), Double.parseDouble(cleanPrice) );
+                    init();
+                }else{
+                    if(stockFld.getText().isEmpty()){
+                        error = error + "Number of stock/s is empty.\n";
+                    }
+                    if(nameFld.getText().isEmpty()){
+                        error = error + "Product name is empty.\n";
+                    }
+                    if(priceFld.getText().isEmpty()){
+                        error = error + "Product price is empty.\n";
+                    }
+                    if(!validStock){
+                        error = error + "Invalid value for product stocks.\n";
+                        
+                    }else if(Integer.parseInt(stockFld.getText())<=0){
+                        error = error + "Stocks must be greater than 0.\n";
+                    }
+                    if(!validPrice){
+                        error = error + "Invalid value for product price.\n";
+                        
+                    }
+                    if(!validName){
+                        error = error + "Duplicate product name.\n";
+                        
+                    }
+                    JOptionPane.showMessageDialog(null,error,"Invalid Product",JOptionPane.ERROR_MESSAGE);
+                }
             System.out.println(nameFld.getText());
             System.out.println(stockFld.getText());
             System.out.println(priceFld.getText());
@@ -242,6 +296,72 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, message, "EDIT PRODUCT", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null);
 
             if (result == JOptionPane.OK_OPTION) {
+                if(nameFld.getText().trim().isEmpty()){
+                    nameFld.setText(nameFld.getText().replace(" ", ""));
+                }else{
+                     nameFld.setText(nameFld.getText().trim());
+                }        
+                stockFld.setText(stockFld.getText().replace(" ", ""));
+                priceFld.setText(priceFld.getText().replace(" ", ""));
+                
+                String error = "";
+                
+                boolean validName = true;
+                int editIndex = -1; //THIS WILL HOLD THE INDEX OF THE PRODUCT TO BE EDITED
+                ArrayList<Product> products = sqlite.getProduct();
+                for(int nCtr = 0; nCtr < products.size(); nCtr++){
+                    if(products.get(nCtr).getName().equals(tableModel.getValueAt(table.getSelectedRow(), 0).toString())){
+                        editIndex = nCtr;
+                    }
+                }
+                
+                //IF THE NAME HAS A DUPLICATE IN THE DB BESIDE THE CURRENT PRODUCT'S NAME TO BE EDITED
+                for(int nCtr = 0; nCtr < products.size(); nCtr++){
+                    if(products.get(nCtr).getName().toLowerCase().equals(nameFld.getText().toLowerCase()) && editIndex!=nCtr){
+                        validName = false;
+                    }
+                }
+
+             
+                Pattern p = Pattern.compile("^[0-9]*$", Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(stockFld.getText());
+                boolean validStock = m.find();
+                //"^([0-9]*[.])?[0-9]{0,2}$" REGEX FOR PRICE WITHOUT COMMA
+                Pattern p1 = Pattern.compile("^([0-9]*[,]?[0-9]+[.])?[0-9]{0,2}$", Pattern.CASE_INSENSITIVE);
+                Matcher m1 = p1.matcher(priceFld.getText());
+                boolean validPrice = m1.find();
+                String cleanPrice = priceFld.getText().replace(",", "");
+                
+                if(!stockFld.getText().isEmpty() && !nameFld.getText().isEmpty() && !priceFld.getText().isEmpty() && validStock && validPrice && validName && Integer.parseInt(stockFld.getText())>0){
+                    JOptionPane.showMessageDialog(null,"Successfully edited "+nameFld.getText()+".","Edit Product",JOptionPane.INFORMATION_MESSAGE);
+                    sqlite.editProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), nameFld.getText(), Integer.parseInt(stockFld.getText()), Double.parseDouble(cleanPrice) );
+                    init();
+                }else{
+                    if(stockFld.getText().isEmpty()){
+                        error = error + "Number of stock/s is empty.\n";
+                    }
+                    if(nameFld.getText().isEmpty()){
+                        error = error + "Product name is empty.\n";
+                    }
+                    if(priceFld.getText().isEmpty()){
+                        error = error + "Product price is empty.\n";
+                    }
+                    if(!validStock){
+                        error = error + "Invalid value for product stocks.\n";
+                        
+                    }else if(Integer.parseInt(stockFld.getText())<=0){
+                        error = error + "Stocks must be greater than 0.\n";
+                    }
+                    if(!validPrice){
+                        error = error + "Invalid value for product price.\n";
+                        
+                    }
+                    if(!validName){
+                        error = error + "Duplicate product name.\n";
+                        
+                    }
+                    JOptionPane.showMessageDialog(null,error,"Edit Product",JOptionPane.ERROR_MESSAGE);
+                }
                 System.out.println(nameFld.getText());
                 System.out.println(stockFld.getText());
                 System.out.println(priceFld.getText());
@@ -254,7 +374,10 @@ public class MgmtProduct extends javax.swing.JPanel {
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE PRODUCT", JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
+                sqlite.removeProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString());
                 System.out.println(tableModel.getValueAt(table.getSelectedRow(), 0));
+                JOptionPane.showMessageDialog(null,"Successfully deleted product: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+".","Delete Product",JOptionPane.INFORMATION_MESSAGE);
+                init();
             }
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
