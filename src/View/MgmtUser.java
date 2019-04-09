@@ -41,89 +41,22 @@ public class MgmtUser extends javax.swing.JPanel {
 //        deleteBtn.setVisible(false);
 //        lockBtn.setVisible(false);
 //        chgpassBtn.setVisible(false);
-        
     }
     
     public void init(){
-        switch(user.getRole()){
-            case 1: break;
-            case 2:
-                System.out.println(user.getUsername()+" || entered2");
-                editRoleBtn.setVisible(false);
-                deleteBtn.setVisible(false);
-                lockBtn.setVisible(false);
-                chgpassBtn.setVisible(true);
-                break;
-            case 3:
-                System.out.println(user.getRole()+" ||entered3");
-                editRoleBtn.setVisible(false);
-                deleteBtn.setVisible(false);
-                lockBtn.setVisible(true);
-                chgpassBtn.setVisible(true);
-                break;
-            case 4:
-                System.out.println(user.getRole()+" ||entered4");
-                editRoleBtn.setVisible(true);
-                deleteBtn.setVisible(false);
-                lockBtn.setVisible(true);
-                chgpassBtn.setVisible(true);
-                break;
-            case 5:
-                System.out.println(user.getRole()+" ||entered5");
-                editRoleBtn.setVisible(true);
-                deleteBtn.setVisible(true);
-                lockBtn.setVisible(true);
-                chgpassBtn.setVisible(true);
-                break;
-        };
-        //CLEAR TABLE
+        //      CLEAR TABLE
         for(int nCtr = tableModel.getRowCount(); nCtr > 0; nCtr--){
             tableModel.removeRow(0);
         }
         
 //      LOAD CONTENTS
-        if(user.getRole() == 5){
-            ArrayList<User> users = sqlite.getUsers();
-            for(int nCtr = 0; nCtr < users.size(); nCtr++){
-                tableModel.addRow(new Object[]{
-                    users.get(nCtr).getUsername(), 
-                    users.get(nCtr).getPassword(), 
-                    users.get(nCtr).getRole(), 
-                    users.get(nCtr).getLocked()});
-            }
-        }else if(user.getRole() == 4){
-            ArrayList<User> users = sqlite.getUsers();
-            for(int nCtr = 0; nCtr < users.size(); nCtr++){
-                if(users.get(nCtr).getRole()!=5){
-                    tableModel.addRow(new Object[]{
-                        users.get(nCtr).getUsername(), 
-                        users.get(nCtr).getPassword(), 
-                        users.get(nCtr).getRole(), 
-                        users.get(nCtr).getLocked()});
-                }
-            }
-        }else if(user.getRole() == 3){
-            ArrayList<User> users = sqlite.getUsers();
-            for(int nCtr = 0; nCtr < users.size(); nCtr++){
-                if(users.get(nCtr).getRole()!=5 && users.get(nCtr).getRole()!=4){
-                    tableModel.addRow(new Object[]{
-                        users.get(nCtr).getUsername(), 
-                        users.get(nCtr).getPassword(), 
-                        users.get(nCtr).getRole(), 
-                        users.get(nCtr).getLocked()});
-                }
-            }
-        }else{
-            ArrayList<User> users = sqlite.getUsers();
-            for(int nCtr = 0; nCtr < users.size(); nCtr++){
-                if(users.get(nCtr).getUsername().equals(user.getUsername())){
-                    tableModel.addRow(new Object[]{
-                        users.get(nCtr).getUsername(), 
-                        users.get(nCtr).getPassword(), 
-                        users.get(nCtr).getRole(), 
-                        users.get(nCtr).getLocked()});
-                }
-            }
+        ArrayList<User> users = sqlite.getUsers();
+        for(int nCtr = 0; nCtr < users.size(); nCtr++){
+            tableModel.addRow(new Object[]{
+                users.get(nCtr).getUsername(), 
+                users.get(nCtr).getPassword(), 
+                users.get(nCtr).getRole(), 
+                users.get(nCtr).getLocked()});
         }
     }
     
@@ -380,9 +313,7 @@ public class MgmtUser extends javax.swing.JPanel {
     }
     
     private void chgpassBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chgpassBtnActionPerformed
-        if(table.getSelectedRow() >= 0 
-                && ((tableModel.getValueAt(table.getSelectedRow(), 0).toString().equals(user.getUsername()) && user.getRole()!=5) || user.getRole()==5 )                               
-          ){
+        if(table.getSelectedRow() >= 0){
             JTextField password = new JPasswordField();
             JTextField confpass = new JPasswordField();
             designer(password, "PASSWORD");
@@ -404,14 +335,12 @@ public class MgmtUser extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null,"User: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+" password has been updated.","Change Password",JOptionPane.INFORMATION_MESSAGE);
                     init();
                 }else{
-                    Logs log = new Logs("FAIL", user.getUsername(), "User:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString() +" password change unsuccessful");
+                     Logs log = new Logs("FAIL", user.getUsername(), "User:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString() +" password change unsuccessful");
                     sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                 }                
                 
                 
             }
-        }else{
-              JOptionPane.showMessageDialog(null,"You are not authorized","Change Password",JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_chgpassBtnActionPerformed
 
