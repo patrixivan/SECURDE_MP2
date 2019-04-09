@@ -34,6 +34,7 @@ public class ClientHome extends javax.swing.JPanel {
     }
     
     public void init(SQLite sqlite){
+        usersBtn.setText("USER");
         u=new User(null, null);
         mgmtHistory = new MgmtHistory(sqlite, this.u);
         mgmtLogs = new MgmtLogs(sqlite, this.u);
@@ -56,6 +57,7 @@ public class ClientHome extends javax.swing.JPanel {
     
     public void showPnl(String panelName){
         contentView.show(Content, panelName);
+         
     }
 
     /**
@@ -163,6 +165,7 @@ public class ClientHome extends javax.swing.JPanel {
 
     private void usersBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usersBtnActionPerformed
         mgmtUser.init();
+      
         usersBtn.setForeground(Color.red);
         productsBtn.setForeground(Color.black);
         historyBtn.setForeground(Color.black);

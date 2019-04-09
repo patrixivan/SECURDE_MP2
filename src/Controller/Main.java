@@ -35,10 +35,10 @@ public class Main {
         
         // Add users
         sqlite.addUser("a", "a" , 5);
-        sqlite.addUser("manager", "qwerty1234", 4);
-       sqlite.addUser("staff", "qwerty1234", 3);
-        sqlite.addUser("client1", "qwerty1234", 2);
-        sqlite.addUser("client2", "qwerty1234", 2);
+        sqlite.addUser("m", "a", 4);
+       sqlite.addUser("s", "a", 3);
+        sqlite.addUser("c", "a", 2);
+        sqlite.addUser("client2", "a", 2);
         
         // Get users
         ArrayList<User> users = sqlite.getUsers();
