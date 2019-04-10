@@ -359,11 +359,12 @@ public class Frame extends javax.swing.JFrame {
                 }else if(users.get(nCtr).getUsername().equals(username) && !users.get(nCtr).getPassword().equals(password)){
                     users.get(nCtr).setAttempt(users.get(nCtr).getAttempt()+1);
                     main.sqlite.editUserAttempt(users.get(nCtr).getUsername(),users.get(nCtr).getAttempt());
-                    
                     System.out.println(users.get(nCtr).getUsername()+users.get(nCtr).getAttempt());
                 }  
             }else{
                 main.sqlite.editUserLock(users.get(nCtr).getUsername(), 1);
+                Logs logLocked = new Logs("NOTICE", username, "User:"+users.get(nCtr).getUsername()+" is locked" );
+                main.sqlite.addLogs(logLocked.getEvent(), logLocked.getUsername(), logLocked.getDesc(), logLocked.getTimestamp().toString());
                 return "locked";
             }
             
