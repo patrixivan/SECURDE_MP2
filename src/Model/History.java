@@ -21,6 +21,9 @@ public class History {
     private String name;
     private int stock;
     private Timestamp timestamp;
+    private double price;
+    private double total;
+    
 
     private SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
     
@@ -36,6 +39,28 @@ public class History {
         this.username = username;
         this.name = name;
         this.stock = stock;
+        try {
+            this.timestamp = new Timestamp(dateformat.parse(timestamp).getTime());
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public History(String username, String name, int stock, double price, double total){
+        this.username = username;
+        this.name = name;
+        this.stock = stock;
+        this.price = price;
+        this.total = total;
+        this.timestamp = new Timestamp(new Date().getTime());
+    }
+    
+    public History(String username, String name, int stock, double price, double total, String timestamp){
+        this.username = username;
+        this.name = name;
+        this.stock = stock;
+        this.price = price;
+        this.total = total;
         try {
             this.timestamp = new Timestamp(dateformat.parse(timestamp).getTime());
         } catch (ParseException ex) {
@@ -73,6 +98,20 @@ public class History {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
     
     public Timestamp getTimestamp() {

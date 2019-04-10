@@ -58,10 +58,11 @@ public class MgmtHistory extends javax.swing.JPanel {
                         history.get(nCtr).getUsername(), 
                         history.get(nCtr).getName(), 
                         history.get(nCtr).getStock(), 
-                        product.getPrice(), 
-                        product.getPrice() * history.get(nCtr).getStock(), 
+                        history.get(nCtr).getPrice(), 
+                        history.get(nCtr).getTotal(), 
                         history.get(nCtr).getTimestamp()
                     });
+//                    System.out.println( history.get(nCtr).getUsername()+" || "+history.get(nCtr).getName()+" || "+history.get(nCtr).getStock()+" || "+history.get(nCtr).getPrice());
                 }
             }
         }else{
@@ -72,8 +73,8 @@ public class MgmtHistory extends javax.swing.JPanel {
                     history.get(nCtr).getUsername(), 
                     history.get(nCtr).getName(), 
                     history.get(nCtr).getStock(), 
-                    product.getPrice(), 
-                    product.getPrice() * history.get(nCtr).getStock(), 
+                    history.get(nCtr).getPrice(), 
+                    history.get(nCtr).getTotal(),  
                     history.get(nCtr).getTimestamp()
                 });
             }
@@ -209,12 +210,11 @@ public class MgmtHistory extends javax.swing.JPanel {
                         history.get(nCtr).getUsername(), 
                         history.get(nCtr).getName(), 
                         history.get(nCtr).getStock(), 
-                        product.getPrice(), 
-                        product.getPrice() * history.get(nCtr).getStock(), 
-                       
+                        history.get(nCtr).getPrice(), 
+                        history.get(nCtr).getTotal(), 
                         history.get(nCtr).getTimestamp()
                     });
-                    
+//                    System.out.println( history.get(nCtr).getUsername()+" || "+history.get(nCtr).getName()+" || "+history.get(nCtr).getName()+" || "+history.get(nCtr).getStock()+" || "+history.get(nCtr).getPrice());
                 }
             }
         }

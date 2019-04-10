@@ -34,6 +34,8 @@ public class SQLite {
             + " username TEXT NOT NULL,\n"
             + " name TEXT NOT NULL,\n"
             + " stock INTEGER DEFAULT 0,\n"
+            + " price DOUBLE DEFAULT 0,\n"
+            + " total DOUBLE DEFAULT 0,\n"
             + " timestamp TEXT NOT NULL\n"
             + ");";
 
@@ -132,8 +134,8 @@ public class SQLite {
         } catch (Exception ex) {}
     }
     
-    public void addHistory(String username, String name, int stock, String timestamp) {
-        String sql = "INSERT INTO history(username,name,stock,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + timestamp + "')";
+    public void addHistory(String username, String name, int stock,double price, double total, String timestamp) {
+        String sql = "INSERT INTO history(username,name,stock,price,total,timestamp) VALUES('" + username + "','" + name + "','" + stock + "','" + price + "','" + total + "','" + timestamp + "')";
         
         try (Connection conn = DriverManager.getConnection(driverURL);
             Statement stmt = conn.createStatement()){
@@ -211,7 +213,7 @@ public class SQLite {
     
     
     public ArrayList<History> getHistory(){
-        String sql = "SELECT id, username, name, stock, timestamp FROM history";
+        String sql = "SELECT username, name, stock, price, total, timestamp FROM history";
         ArrayList<History> histories = new ArrayList<History>();
         
         try (Connection conn = DriverManager.getConnection(driverURL);
@@ -219,11 +221,14 @@ public class SQLite {
             ResultSet rs = stmt.executeQuery(sql)){
             
             while (rs.next()) {
-                histories.add(new History(rs.getInt("id"),
-                                   rs.getString("username"),
+                History h = new History(rs.getString("username"),
                                    rs.getString("name"),
                                    rs.getInt("stock"),
-                                   rs.getString("timestamp")));
+                                   rs.getDouble("price"),
+                                   rs.getDouble("total"),
+                                   rs.getString("timestamp"));
+                System.out.println(rs.getString("username")+" || "+ rs.getString("name")+" || "+rs.getInt("stock")+" || "+rs.getDouble("price"));
+                histories.add(h);
             }
         } catch (Exception ex) {}
         return histories;

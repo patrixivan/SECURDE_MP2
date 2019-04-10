@@ -319,7 +319,8 @@ public class Frame extends javax.swing.JFrame {
         //End Hashing
         for(int nCtr = 0; nCtr < users.size(); nCtr++){
             if(users.get(nCtr).getAttempt()<5){
-                if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password) && users.get(nCtr).getLocked()==0){   
+                if(users.get(nCtr).getUsername().equals(username) && users.get(nCtr).getPassword().equals(password) && users.get(nCtr).getLocked()==0){
+                    users.get(nCtr).setAttempt(0);
                     User u = new User(users.get(nCtr).getId(), users.get(nCtr).getUsername(), users.get(nCtr).getPassword(), users.get(nCtr).getRole(), users.get(nCtr).getLocked(), users.get(nCtr).getAttempt());
                     frameView.show(Container, "homePnl"); //if user login with valid credentials proceed to home
                     Logs log = new Logs("NOTICE", username, "User logged in");
@@ -359,6 +360,8 @@ public class Frame extends javax.swing.JFrame {
                 }else if(users.get(nCtr).getUsername().equals(username) && !users.get(nCtr).getPassword().equals(password)){
                     users.get(nCtr).setAttempt(users.get(nCtr).getAttempt()+1);
                     main.sqlite.editUserAttempt(users.get(nCtr).getUsername(),users.get(nCtr).getAttempt());
+                    Logs log = new Logs("NOTICE", username, "User:"+users.get(nCtr).getUsername()+" login attempt failed" );
+                    main.sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                     System.out.println(users.get(nCtr).getUsername()+users.get(nCtr).getAttempt());
                 }  
             }else{
@@ -372,7 +375,7 @@ public class Frame extends javax.swing.JFrame {
         frameView.show(Container, "loginPnl");
         for(int lCtr = 0; lCtr < users.size(); lCtr++){
             if(users.get(lCtr).getUsername().equals(username) && users.get(lCtr).getLocked()==0){
-                System.out.println("I went here");
+//                System.out.println("I went here");
                 return "incorrect";
             }else if(users.get(lCtr).getUsername().equals(username) && users.get(lCtr).getLocked()==1){
                 System.out.println(users.get(lCtr).getAttempt());

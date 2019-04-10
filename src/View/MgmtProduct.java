@@ -232,8 +232,8 @@ public class MgmtProduct extends javax.swing.JPanel {
                     if(!stockFld.getText().isEmpty() && validStock && Integer.parseInt(stockFld.getText())>0 && Integer.parseInt(stockFld.getText()) <= Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 1).toString())){
                         JOptionPane.showMessageDialog(null,"Successfully purchased "+stockFld.getText()+" "+tableModel.getValueAt(table.getSelectedRow(), 0)+".","Purchase",JOptionPane.INFORMATION_MESSAGE);
                         sqlite.purchaseProduct(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
-                        History h = new History(user.getUsername(), tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()));
-                        sqlite.addHistory(h.getUsername(), h.getName(), h.getStock(), h.getTimestamp().toString());
+                        History h = new History(user.getUsername(), tableModel.getValueAt(table.getSelectedRow(), 0).toString(), Integer.parseInt(stockFld.getText()), Double.parseDouble(tableModel.getValueAt(table.getSelectedRow(), 1).toString()), Double.parseDouble(tableModel.getValueAt(table.getSelectedRow(), 1).toString()) *  Double.parseDouble(tableModel.getValueAt(table.getSelectedRow(), 2).toString()));
+                        sqlite.addHistory(h.getUsername(), h.getName(), h.getStock(),h.getPrice(),h.getTotal(),  h.getTimestamp().toString());
                         Logs log = new Logs("PROD", user.getUsername(), "Purchased "+Integer.parseInt(stockFld.getText())+" product:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString());
                         sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
                         init();
