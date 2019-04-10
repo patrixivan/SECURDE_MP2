@@ -251,7 +251,7 @@ public class MgmtUser extends javax.swing.JPanel {
 
     private void editRoleBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editRoleBtnActionPerformed
         
-        if(table.getSelectedRow() >= 0){
+        if(table.getSelectedRow() >= 0 && (!user.getUsername().equals(tableModel.getValueAt(table.getSelectedRow(), 0).toString()))  ) {
             String[] options = {"1-DISABLED","2-CLIENT","3-STAFF","4-MANAGER","5-ADMIN"};
             if(user.getRole()==4){
                 String[] mOption ={"1-DISABLED","2-CLIENT","3-STAFF"};
@@ -275,6 +275,8 @@ public class MgmtUser extends javax.swing.JPanel {
                 init();
                 
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "You cannot edit own role", "Edit Role", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_editRoleBtnActionPerformed
 
@@ -290,7 +292,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 init();
             }
         }else{
-             JOptionPane.showMessageDialog(null, "You cant delete an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
+             JOptionPane.showMessageDialog(null, "You cannot delete an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
@@ -327,7 +329,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 init();
             }
         }else{
-            JOptionPane.showMessageDialog(null, "You cant lock an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "You cannot lock an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_lockBtnActionPerformed
 
