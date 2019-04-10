@@ -308,6 +308,7 @@ public class MgmtUser extends javax.swing.JPanel {
                 if(state.equals("lock")){
                     lock = 1;
                 }else if(state.equals("unlock")){
+                    sqlite.editUserAttempt(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), 0);
                     lock = 0;
                 }
                 sqlite.editUserLock(tableModel.getValueAt(table.getSelectedRow(), 0).toString(), lock);
