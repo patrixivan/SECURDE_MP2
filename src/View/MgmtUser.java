@@ -280,7 +280,13 @@ public class MgmtUser extends javax.swing.JPanel {
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         if(table.getSelectedRow() >= 0){
-            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
+            int result; 
+            if(tableModel.getValueAt(table.getSelectedRow(), 2).equals(5)){
+                JOptionPane.showMessageDialog(null, "You cant delete an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
+                result=1;
+            }
+            else
+                result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
                 Logs log = new Logs("USERS", user.getUsername(), "Deleted user:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString());
@@ -301,8 +307,13 @@ public class MgmtUser extends javax.swing.JPanel {
             if("1".equals(tableModel.getValueAt(table.getSelectedRow(), 3) + "")){
                 state = "unlock";
             }
-            
-            int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to " + state + " " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
+            int result; 
+            if(tableModel.getValueAt(table.getSelectedRow(), 2).equals(5)){
+                JOptionPane.showMessageDialog(null, "You cant lock an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
+                result=1;
+            }
+            else
+                result = JOptionPane.showConfirmDialog(null, "Are you sure you want to " + state + " " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
             
             if (result == JOptionPane.YES_OPTION) {
                 if(state.equals("lock")){
