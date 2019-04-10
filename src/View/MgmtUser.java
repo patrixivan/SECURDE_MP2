@@ -279,9 +279,8 @@ public class MgmtUser extends javax.swing.JPanel {
     }//GEN-LAST:event_editRoleBtnActionPerformed
 
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        if(table.getSelectedRow() >= 0){
+        if(table.getSelectedRow() >= 0 && Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 2).toString())!=5){
             int result = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + tableModel.getValueAt(table.getSelectedRow(), 0) + "?", "DELETE USER", JOptionPane.YES_NO_OPTION);
-            
             if (result == JOptionPane.YES_OPTION) {
                 Logs log = new Logs("USERS", user.getUsername(), "Deleted user:"+tableModel.getValueAt(table.getSelectedRow(), 0).toString());
                 sqlite.addLogs(log.getEvent(), log.getUsername(), log.getDesc(), log.getTimestamp().toString());
@@ -290,12 +289,13 @@ public class MgmtUser extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null,"User: "+tableModel.getValueAt(table.getSelectedRow(), 0).toString()+" has been deleted.","Delete User",JOptionPane.INFORMATION_MESSAGE);
                 init();
             }
+        }else{
+             JOptionPane.showMessageDialog(null, "You cant delete an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void lockBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lockBtnActionPerformed
-        System.out.print(this.user.getUsername());
-        if(table.getSelectedRow() >= 0){
+        if(table.getSelectedRow() >= 0 && Integer.parseInt(tableModel.getValueAt(table.getSelectedRow(), 2).toString())!=5){
             String state = "lock";
             int lock = 0;
             if("1".equals(tableModel.getValueAt(table.getSelectedRow(), 3) + "")){
@@ -326,6 +326,8 @@ public class MgmtUser extends javax.swing.JPanel {
                 
                 init();
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "You cant lock an admin", "Delete User", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_lockBtnActionPerformed
 
